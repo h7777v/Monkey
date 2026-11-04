@@ -1,11 +1,11 @@
 #include <monkey.h>
 
 #include <stdint.h>
+#include <limits.h>
+#include <stdio.h>
 
 #include "pages.h"
 #include "internal.h"
-
-#include <stdio.h>
 
 size_t monkey_os_page_size = 0;
 
@@ -67,6 +67,49 @@ int chaos(void* ptr){
 
     for(size_t i = 0; i < monkey_os_page_size; i++){
         page[i] = (unsigned char)rng_bounded(UCHAR_MAX + 1);
+    }
+
+    return 0;
+}
+
+int cosmic_rays(void* ptr){
+    if(ptr == NULL)return 1;
+    if(monkey_os_page_size == 0){
+        if(monkey_init())return 1;
+    }
+    
+    unsigned char* page = monkey_get_page(ptr);
+
+    if(!seed){
+        rng_initialize_seed(&seed);
+        rng_seed(seed);
+    }
+
+    unsigned char* cooked = (unsigned char *)page + rng_bounded(monkey_os_page_size);
+
+    *cooked ^= (unsigned char)(1u << rng_bounded(CHAR_BIT));
+
+    return 0;
+}
+
+int solar_flare(void* ptr, size_t category){
+    if(ptr == NULL)return 1;
+    if(monkey_os_page_size == 0){
+        if(monkey_init())return 1;
+    }
+    
+    unsigned char* page = monkey_get_page(ptr);
+
+    if(!seed){
+        rng_initialize_seed(&seed);
+        rng_seed(seed);
+    }
+
+    unsigned char* cooked;
+
+    for(size_t i = 0; i < category; i++){
+        cooked = (unsigned char *)page + rng_bounded(monkey_os_page_size);
+        *cooked ^= (unsigned char)(1u << rng_bounded(CHAR_BIT));
     }
 
     return 0;

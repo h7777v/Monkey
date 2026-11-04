@@ -28,6 +28,18 @@ int chaos(void* ptr);
 Scrambles EVERYTHING in the page of the given pointer. This causes ultimate destruction and most likely result in a crash. 
 
 ```c
+int cosmic_rays(void* ptr);
+```
+
+Just like what real cosmic rays do to your computer, it flips a random bit in the page that the pointer belongs to. 
+
+```c
+int solar_flare(void* ptr, size_t category);
+```
+
+Solar flare = lots of cosmic rays, but you get to choose how many rays you want to send with the "category" argument(this is how many rays no the actual astronomical measurement obviously). Also category(if you're wondering) comes from how real solar flares are catagorised like A, B, C, M, and X-class. Anyways this function lets you simulate a solar flare without having to wait for one. 
+
+```c
 int archeology(void* ptr);
 ```
 
